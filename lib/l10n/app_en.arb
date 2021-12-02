@@ -1,0 +1,11 @@
+{
+  "appbar_title": "To Do List",
+  "delete_btn": "Delete",
+  "add_task_title": "Add new Task",
+  "task_title_hint": "enter your task",
+  "select_time_label":	"Select Time",
+  "language_label":	"Language",
+  "mode_label"	:"Mode",
+  "light_mode":	"Light",
+  "dark_mode":	"Dark"
+}
