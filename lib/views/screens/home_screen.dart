@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:todo_app/views/screens/setting_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -19,6 +20,7 @@ class HomeScreen extends StatelessWidget {
         child: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: SettingScreen(),
       bottomNavigationBar: BottomAppBar(
         clipBehavior: Clip.antiAlias,
         notchMargin: 7,
