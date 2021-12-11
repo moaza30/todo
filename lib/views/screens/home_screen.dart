@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:todo_app/views/screens/setting_screen.dart';
+import 'package:todo_app/views/screens/tasks_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int currentScreenIndex = 0;
+
+  List screens = [
+    TasksScreen(),
+    SettingScreen(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,23 +33,25 @@ class HomeScreen extends StatelessWidget {
         child: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: SettingScreen(),
+      body: screens[currentScreenIndex],
       bottomNavigationBar: BottomAppBar(
         clipBehavior: Clip.antiAlias,
         notchMargin: 7,
         shape: CircularNotchedRectangle(),
         color: Theme.of(context).colorScheme.secondary,
         elevation: 0,
+        // BottomNavigationBar
         child: BottomNavigationBar(
+          currentIndex: currentScreenIndex,
+          onTap: (value) {
+            currentScreenIndex = value;
+            setState(() {});
+          },
+          selectedItemColor: Theme.of(context).primaryColor,
+          unselectedItemColor: Colors.grey,
           backgroundColor: Theme.of(context).colorScheme.secondary,
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          selectedIconTheme: IconThemeData(
-            color: Theme.of(context).primaryColor,
-          ),
-          unselectedIconTheme: IconThemeData(
-            color: Colors.grey,
-          ),
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.list), label: ''),
             BottomNavigationBarItem(
