@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:todo_app/controlles/tasks_provider.dart';
+import 'package:todo_app/views/widgets/task_item.dart';
 
 class TasksScreen extends StatefulWidget {
   @override
@@ -56,88 +58,12 @@ class _TasksScreenState extends State<TasksScreen> {
           ),
         ),
         Expanded(
-          child: ListView(
+          child: ListView.builder(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Slidable(
-                  startActionPane: ActionPane(
-                      extentRatio: 0.25,
-                      motion: BehindMotion(),
-                      children: [
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.delete,
-                                  color: Colors.white,
-                                  size: 28,
-                                ),
-                                Text(
-                                  AppLocalizations.of(context)!.delete_btn,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ]),
-                  child: Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-
-                    //ListTile
-                    child: ListTile(
-                      horizontalTitleGap: 0,
-                      leading: VerticalDivider(
-                        thickness: 4,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      title: Text(
-                        'Task Title',
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Container(
-                        margin: EdgeInsets.only(top: 7),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.timer,
-                              size: 14,
-                            ),
-                            Text('10:00 PM')
-                          ],
-                        ),
-                      ),
-                      trailing: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Theme.of(context).primaryColor,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        onPressed: () {},
-                        child: Icon(Icons.check),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ],
+            itemCount: Provider.of<TasksProvider>(context).tasks.length,
+            itemBuilder: (context, index) {
+              return Taskitem(Provider.of<TasksProvider>(context).tasks[index]);
+            },
           ),
         ),
       ],

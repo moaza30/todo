@@ -3,13 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:todo_app/controlles/setting_provider.dart';
 import 'package:todo_app/views/screens/home_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:todo_app/controlles/tasks_provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => SettingsProvider(),
-      child: MyApp(),
-    ),
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context) => SettingsProvider()),
+      ChangeNotifierProvider(create: (context) => TasksProvider()),
+    ], child: MyApp()),
   );
 }
 

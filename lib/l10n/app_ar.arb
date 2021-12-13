@@ -3,9 +3,11 @@
   "delete_btn": "مسح",
   "add_task_title": "إضافة مهمة جديدة",
   "task_title_hint": "أدخل عنوان المهمة",
-  "select_time_label":	"إختر التوقيت",
+  "select_time_label":	"إختر التوقيت التاريخ ",
   "language_label":	"اللغة",
   "mode_label"	:"الوضعية",
   "light_mode":	"مضيئ",
-  "dark_mode":	"مظلم"
+  "dark_mode":	"مظلم",
+  "cancel_btn": "الغاء",
+  "add_btn": "اضافه مهمه"
 }

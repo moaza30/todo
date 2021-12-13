@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:todo_app/views/screens/setting_screen.dart';
 import 'package:todo_app/views/screens/tasks_screen.dart';
+import 'package:todo_app/views/widgets/add_task_sheet.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -29,7 +30,17 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet(
+            enableDrag: false,
+            isDismissible: false,
+            backgroundColor: Colors.transparent,
+            context: context,
+            builder: (context) {
+              return AddTaskSheet();
+            },
+          );
+        },
         child: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
