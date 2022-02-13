@@ -1,30 +1,38 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_app/controlles/setting_provider.dart';
-import 'package:todo_app/views/screens/home_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:todo_app/controlles/tasks_provider.dart';
 
-void main() {
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'controlles/setting_provider.dart';
+import 'controlles/tasks_provider.dart';
+import 'views/screens/home_screen.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(
-    MultiProvider(providers: [
-      ChangeNotifierProvider(create: (context) => SettingsProvider()),
-      ChangeNotifierProvider(create: (context) => TasksProvider()),
-    ], child: MyApp()),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => SettingsProvider()),
+        ChangeNotifierProvider(create: (context) => TasksProvider()),
+      ],
+      child: MyApp(),
+    ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ToDo App',
+      title: 'Todo App',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
-        scaffoldBackgroundColor: Color(0xFFDFECDB),
         primaryColor: Color(0xFF5D9CEC),
+        scaffoldBackgroundColor: Color(0xFFDFECDB),
         colorScheme: Theme.of(context).colorScheme.copyWith(
               brightness: Brightness.light,
               secondary: Colors.white,
@@ -40,8 +48,8 @@ class MyApp extends StatelessWidget {
         ),
       ),
       darkTheme: ThemeData(
-        scaffoldBackgroundColor: Color(0xFF060E1E),
         primaryColor: Color(0xFF5D9CEC),
+        scaffoldBackgroundColor: Color(0xFF060E1E),
         colorScheme: Theme.of(context).colorScheme.copyWith(
               brightness: Brightness.dark,
               secondary: Color(0xFF141922),
@@ -50,7 +58,7 @@ class MyApp extends StatelessWidget {
             ),
         textTheme: TextTheme(
           headline1: TextStyle(
-            color: Colors.white,
+            color: Color(0xFF060E1E),
             fontSize: 22,
             fontWeight: FontWeight.bold,
           ),

@@ -13,7 +13,7 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void changeLocal(String locale) {
+  void changeLocale(String locale) {
     this.locale = locale;
     notifyListeners();
   }

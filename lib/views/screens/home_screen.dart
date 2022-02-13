@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:todo_app/views/screens/setting_screen.dart';
-import 'package:todo_app/views/screens/tasks_screen.dart';
 import 'package:todo_app/views/widgets/add_task_sheet.dart';
+
+import 'setting_screen.dart';
+import 'tasks_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List screens = [
     TasksScreen(),
-    SettingScreen(),
+    SettingsScreen(),
   ];
 
   @override
@@ -32,10 +33,10 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
           showModalBottomSheet(
-            enableDrag: false,
-            isDismissible: false,
-            backgroundColor: Colors.transparent,
             context: context,
+            isDismissible: false,
+            enableDrag: false,
+            backgroundColor: Colors.transparent,
             builder: (context) {
               return AddTaskSheet();
             },
@@ -44,25 +45,24 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: screens[currentScreenIndex],
       bottomNavigationBar: BottomAppBar(
         clipBehavior: Clip.antiAlias,
         notchMargin: 7,
         shape: CircularNotchedRectangle(),
         color: Theme.of(context).colorScheme.secondary,
-        elevation: 0,
-        // BottomNavigationBar
         child: BottomNavigationBar(
-          currentIndex: currentScreenIndex,
           onTap: (value) {
-            currentScreenIndex = value;
-            setState(() {});
+            setState(() {
+              currentScreenIndex = value;
+            });
           },
-          selectedItemColor: Theme.of(context).primaryColor,
-          unselectedItemColor: Colors.grey,
           backgroundColor: Theme.of(context).colorScheme.secondary,
+          elevation: 0,
           showSelectedLabels: false,
           showUnselectedLabels: false,
+          selectedItemColor: Theme.of(context).primaryColor,
+          unselectedItemColor: Colors.grey,
+          currentIndex: currentScreenIndex,
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.list), label: ''),
             BottomNavigationBarItem(
@@ -70,6 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+      body: screens[currentScreenIndex],
     );
   }
 }

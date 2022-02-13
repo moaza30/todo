@@ -1,6 +1,7 @@
 {
   "appbar_title": "قائمة المهام",
   "delete_btn": "مسح",
+  "edit_btn": "تعديل",
   "add_task_title": "إضافة مهمة جديدة",
   "task_title_hint": "أدخل عنوان المهمة",
   "select_time_label":	"إختر التوقيت التاريخ ",

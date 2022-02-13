@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SettingLabel extends StatelessWidget {
+class SettingsLabel extends StatelessWidget {
   final String label;
-  SettingLabel(this.label);
+
+  SettingsLabel(this.label);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -11,7 +13,10 @@ class SettingLabel extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 10),
       child: Text(
         label,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

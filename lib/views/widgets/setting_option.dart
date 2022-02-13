@@ -12,6 +12,7 @@ class SettingsOption extends StatelessWidget {
       required this.value2,
       required this.selectedValue,
       required this.onChanged});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,13 +21,14 @@ class SettingsOption extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondary,
-        //Border Color
-        border: Border.all(color: Theme.of(context).primaryColor),
+        border: Border.all(
+          color: Theme.of(context).primaryColor,
+        ),
       ),
       child: DropdownButton(
+        iconEnabledColor: Theme.of(context).primaryColor,
         isExpanded: true,
         underline: Container(),
-        iconEnabledColor: Theme.of(context).primaryColor,
         onChanged: (value) {
           onChanged(value);
         },
@@ -40,12 +42,11 @@ class SettingsOption extends StatelessWidget {
             value: value1,
           ),
           DropdownMenuItem(
-            child: Text(
-              opt2,
-              style: TextStyle(color: Theme.of(context).primaryColor),
-            ),
-            value: value2,
-          ),
+              child: Text(
+                opt2,
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+              value: value2),
         ],
       ),
     );

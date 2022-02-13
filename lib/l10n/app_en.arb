@@ -1,6 +1,7 @@
 {
   "appbar_title": "To Do List",
   "delete_btn": "Delete",
+  "edit_btn": " Edit Task",
   "add_task_title": "Add new Task",
   "task_title_hint": "enter your task",
   "select_time_label":	"Select Time and Date",

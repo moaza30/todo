@@ -1,10 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app/controlles/tasks_provider.dart';
 import 'package:todo_app/models/task.dart';
 import 'package:todo_app/views/widgets/sheet_label.dart';
-import 'package:todo_app/controlles/tasks_provider.dart';
 
 class AddTaskSheet extends StatefulWidget {
   @override
@@ -12,9 +13,10 @@ class AddTaskSheet extends StatefulWidget {
 }
 
 class _AddTaskSheetState extends State<AddTaskSheet> {
-  late TextEditingController titleController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
   late DateTime selectedDate;
   late TimeOfDay selectedTime;
+  bool isAdding = false;
 
   @override
   void initState() {
@@ -23,7 +25,6 @@ class _AddTaskSheetState extends State<AddTaskSheet> {
     selectedTime = TimeOfDay.now();
   }
 
-  // Remove from Mobile's ram use dispose
   @override
   void dispose() {
     titleController.dispose();
@@ -40,24 +41,44 @@ class _AddTaskSheetState extends State<AddTaskSheet> {
     );
   }
 
+  void showError(String title, String body) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(body),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Ok'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25)
-            .add(EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        )),
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30).add(
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom)),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
           color: Theme.of(context).colorScheme.secondary,
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           children: [
             SheetLabel(AppLocalizations.of(context)!.add_task_title),
             TextField(
+              enabled: !isAdding,
               controller: titleController,
               decoration: InputDecoration(
+                floatingLabelBehavior: FloatingLabelBehavior.always,
                 hintText: AppLocalizations.of(context)!.task_title_hint,
               ),
             ),
@@ -71,86 +92,101 @@ class _AddTaskSheetState extends State<AddTaskSheet> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: selectedDate,
-                      firstDate: DateTime.now().subtract(Duration(days: 365)),
-                      lastDate: DateTime.now().add(Duration(days: 365)),
-                    );
-
-                    if (pickedDate != null) {
-                      selectedDate = pickedDate;
-                      setState(() {});
-                    }
-                  },
-                  child: Text(DateFormat('dd/MM/yyyy').format(selectedDate)),
-                ),
-                SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () async {
-                    TimeOfDay? pickedTime = await showTimePicker(
-                      context: context,
-                      initialTime: selectedTime,
-                    );
-                    if (pickedTime != null) {
-                      selectedTime == pickedTime;
-                      setState(() {});
-                    }
-                  },
+                  onPressed: isAdding
+                      ? null
+                      : () async {
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: selectedDate,
+                            firstDate:
+                                DateTime.now().subtract(Duration(days: 365)),
+                            lastDate: DateTime.now().add(Duration(days: 365)),
+                          );
+                          if (pickedDate != null) {
+                            selectedDate = pickedDate;
+                            setState(() {});
+                          }
+                        },
                   child: Text(
-                    DateFormat('hh:mm a').format(
-                      combineDateAndTime(),
-                    ),
+                    DateFormat('dd/MM/yyyy').format(selectedDate),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton(
+                  onPressed: isAdding
+                      ? null
+                      : () async {
+                          TimeOfDay? pickedTime = await showTimePicker(
+                            context: context,
+                            initialTime: selectedTime,
+                          );
+                          if (pickedTime != null) {
+                            selectedTime = pickedTime;
+                            setState(() {});
+                          }
+                        },
+                  child: Text(
+                    DateFormat('hh:mm a').format(combineDateAndTime()),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                  onPressed: isAdding
+                      ? null
+                      : () {
+                          // Navigator.of(context).pop();
+                          Navigator.pop(context);
+                        },
                   child: Text(
                     AppLocalizations.of(context)!.cancel_btn,
                     style: TextStyle(color: Colors.red),
                   ),
                 ),
                 SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    if (titleController.text.isEmpty) {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text("Missing data"),
-                            content: Text('Please provide a title to the task'),
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text('ok'))
-                            ],
-                          );
+                isAdding
+                    ? CircularProgressIndicator.adaptive()
+                    : ElevatedButton(
+                        onPressed: () async {
+                          if (titleController.text.isEmpty) {
+                            print('hello');
+                            showError('Missing Data',
+                                'Please provide a title to the task');
+                          } else {
+                            String newId = Provider.of<TasksProvider>(context,
+                                    listen: false)
+                                .getNewId;
+                            Task newTask = Task(newId, titleController.text,
+                                combineDateAndTime());
+
+                            setState(() {
+                              isAdding = true;
+                            });
+                            String? error = await Provider.of<TasksProvider>(
+                                    context,
+                                    listen: false)
+                                .addTask(newTask);
+
+                            if (error == null) {
+                              Navigator.pop(context);
+                            } else {
+                              setState(() {
+                                isAdding = false;
+                              });
+                              showError('Adding Task Failed', error);
+                            }
+                          }
                         },
-                      );
-                    } else {
-                      Task newTask =
-                          Task(titleController.text, combineDateAndTime());
-                      Provider.of<TasksProvider>(context, listen: false)
-                          .addTaks(newTask);
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: Text(
-                    AppLocalizations.of(context)!.add_btn,
-                  ),
-                ),
+                        child: Text(
+                          AppLocalizations.of(context)!.add_btn,
+                        ),
+                      ),
               ],
             )
           ],
